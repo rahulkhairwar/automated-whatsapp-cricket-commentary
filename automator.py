@@ -1,4 +1,6 @@
 import urllib.request
+import schedule
+import time
 from bs4 import BeautifulSoup
 from selenium import webdriver
 
@@ -33,9 +35,9 @@ def get_team_name_and_score(soup, top_list_item_class_name):
 
     team = soup.find("li", {"class":top_list_item_class_name}).find("div", TEAM_NAME_CLASS_NAME)
     team_name = team.a.find("span", {"class":TEAM_SPAN_CLASS_NAME}).text
-    team_mini_score = team.find("div", {"class":SCORE_CLASS_NAME}).text
+    team_score = team.find("div", {"class":SCORE_CLASS_NAME}).text
 
-    return team_name, team_mini_score
+    return team_name, team_score
 
 def get_commentary(soup):
     root_div_tags_children = soup.find("div", {"class":"content"})
@@ -88,46 +90,39 @@ def get_match_info_from_espn(last_timestamp):
     soup = BeautifulSoup(page_content, "html.parser")
 
     first_team_name, first_team_score = get_team_name_and_score(soup, FIRST_TEAM_TOP_LIST_ITEM_CLASS_NAME)
-    print("{} - {}".format(first_team_name, first_team_score))
-
     second_team_name, second_team_score = get_team_name_and_score(soup, SECOND_TEAM_TOP_LIST_ITEM_CLASS_NAME)
-    print("{} - {}".format(second_team_name, second_team_score))
-
     match = Match(first_team_name, second_team_name, first_team_score, second_team_score)
     commentary = get_commentary(soup)
     match.commentary = commentary
 
-    # for comment in commentary:
-    #     print("Commentary => {}\n".format(comment))
-
     return match
 
-def get_latest_commentary(last_timestamp):
-    SCORE_CLASS_NAME = "cb-min-bat-rw"
-    MINI_SCORE_SPAN_CLASS_NAME = "cb-font-20 text-bold"
-    SOURCE_URL = "https://www.cricbuzz.com/live-cricket-scores/20301/aus-vs-ind-1st-test-india-tour-of-australia-2018-19"
+def get_match_info():
+    match = get_match_info_from_espn(None)
+    info_string = "*{} - {}*".format(match.first_team, match.first_team_score)
+    info_string += "\n*{} - {}*".format(match.second_team, match.second_team_score)
+    
+    for comment in match.commentary:
+        info_string += "\n*{}* - {}".format(comment.over, comment.description)
 
-    request = urllib.request.Request(SOURCE_URL)
-    response = urllib.request.urlopen(request)
+        if (len(comment.paragraphs) > 0):
+            for p in comment.paragraphs:
+                info_string += "\n{}".format(p)
 
-    page_content = response.read().decode("utf-8")
-    soup = BeautifulSoup(page_content, "html.parser")
-    # data = soup.find("div", {"class":"{}".format(SCORE_CLASS_NAME)})
+    return info_string
 
-    for data in soup.findAll("div", {"class":"{}".format(SCORE_CLASS_NAME)}):
-        for item in data.findAll("span", {"class":"{}".format(MINI_SCORE_SPAN_CLASS_NAME)}):
-            first_team_score = item.text
+def scheduled_job(driver, message_box):
+    SEND_BUTTON_CLASS_NAME = "_35EW6"
 
-    for data in soup.findAll("div", {"ng-init":"comm = match.commentary"}):
-        print(data)
-        break
+    message_content = get_match_info()
+    message_box.send_keys(message_content)
 
-    return first_team_score
+    send_button = driver.find_element_by_class_name(SEND_BUTTON_CLASS_NAME)
+    send_button.click()
 
 def send_messages_on_whatsapp():
     URL = "https://web.whatsapp.com"
     MESSAGE_BOX_CLASS_NAME = "_1Plpp"
-    SEND_BUTTON_CLASS_NAME = "_35EW6"
 
     driver = webdriver.Safari()
     driver.get(URL)
@@ -137,19 +132,17 @@ def send_messages_on_whatsapp():
     user.click()
 
     message_box = driver.find_element_by_class_name(MESSAGE_BOX_CLASS_NAME)
-    count = 50
+    schedule.every(30).minutes.do(scheduled_job, driver, message_box)
+    # schedule.every(15).seconds.do(scheduled_job, driver, message_box)
 
-    for i in range(count):
-
-        # match_details = get_match_details_string()
-        message_box.send_keys("test {}".format(i + 1))
-        send_button = driver.find_element_by_class_name(SEND_BUTTON_CLASS_NAME)
-        send_button.click()
+    while (True):
+        schedule.run_pending()
+        time.sleep(1)
 
 if __name__ == "__main__":
-    # send_messages_on_whatsapp()
+    send_messages_on_whatsapp()
     # latest_commentary = get_latest_commentary(None)
     # print(latest_commentary)
 
-    espn_commentary = get_match_info_from_espn(None)
-    print(espn_commentary)
+    # espn_commentary = get_match_info_from_espn(None)
+    # print(espn_commentary)
