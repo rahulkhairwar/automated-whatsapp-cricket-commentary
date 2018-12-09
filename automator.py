@@ -65,7 +65,6 @@ def get_commentary(soup):
                 comment.add_paragraph(p.text)
 
         if (len(over) != 0 or len(description) != 0 or len(comment.paragraphs) != 0):
-            # print("len(over) : {}, len(desc) : {}, paras.len : {}", len(over), len(description), len(comment.paragraphs))
             commentary.append(comment)
 
     commentary.reverse()
@@ -92,8 +91,7 @@ def get_match_info_from_espn(last_timestamp):
     first_team_name, first_team_score = get_team_name_and_score(soup, FIRST_TEAM_TOP_LIST_ITEM_CLASS_NAME)
     second_team_name, second_team_score = get_team_name_and_score(soup, SECOND_TEAM_TOP_LIST_ITEM_CLASS_NAME)
     match = Match(first_team_name, second_team_name, first_team_score, second_team_score)
-    commentary = get_commentary(soup)
-    match.commentary = commentary
+    match.commentary = get_commentary(soup)
 
     return match
 
@@ -111,29 +109,33 @@ def get_match_info():
 
     return info_string
 
-def scheduled_job(driver, message_box):
+def scheduled_job(driver, names):
+    MESSAGE_BOX_CLASS_NAME = "_1Plpp"
     SEND_BUTTON_CLASS_NAME = "_35EW6"
-
     message_content = get_match_info()
-    message_box.send_keys(message_content)
 
-    send_button = driver.find_element_by_class_name(SEND_BUTTON_CLASS_NAME)
-    send_button.click()
+    for name in names:
+        user = driver.find_element_by_xpath("//span[@title = \"{}\"]".format(name))
+        user.click()
+        
+        message_box = driver.find_element_by_class_name(MESSAGE_BOX_CLASS_NAME)
+        message_box.send_keys(message_content)
+
+        send_button = driver.find_element_by_class_name(SEND_BUTTON_CLASS_NAME)
+        send_button.click()
 
 def send_messages_on_whatsapp():
     URL = "https://web.whatsapp.com"
-    MESSAGE_BOX_CLASS_NAME = "_1Plpp"
 
     driver = webdriver.Safari()
     driver.get(URL)
 
-    name = input("Enter the name of the group/user you want to text : ")
-    user = driver.find_element_by_xpath("//span[@title = \"{}\"]".format(name))
-    user.click()
+    user_input = input("Enter the names of the groups/users you want to text, separated by commas(Eg. - Arya, Sansa, Jon, Bran, Rickon, Robb) : ")
+    names = [x.strip() for x in user_input.split(',')]
 
-    message_box = driver.find_element_by_class_name(MESSAGE_BOX_CLASS_NAME)
-    schedule.every(30).minutes.do(scheduled_job, driver, message_box)
-    # schedule.every(15).seconds.do(scheduled_job, driver, message_box)
+    scheduled_job(driver, names)
+    schedule.every(5).minutes.do(scheduled_job, driver, names)
+    # schedule.every(30).seconds.do(scheduled_job, driver, message_box)
 
     while (True):
         schedule.run_pending()
@@ -141,8 +143,3 @@ def send_messages_on_whatsapp():
 
 if __name__ == "__main__":
     send_messages_on_whatsapp()
-    # latest_commentary = get_latest_commentary(None)
-    # print(latest_commentary)
-
-    # espn_commentary = get_match_info_from_espn(None)
-    # print(espn_commentary)
