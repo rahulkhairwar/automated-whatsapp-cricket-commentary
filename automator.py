@@ -4,6 +4,9 @@ import time
 from bs4 import BeautifulSoup
 from selenium import webdriver
 
+last_comment = ""
+has_updates = True
+
 class Match:
     def __init__(self, first_team, second_team, first_team_score, second_team_score):
         self.first_team = first_team
@@ -23,6 +26,12 @@ class Comment:
 
     def add_paragraph(self, paragraph):
         self.paragraphs.append(paragraph)
+        
+    def __eq__(self, other):
+        return self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return self.__dict__ != other.__dict__
 
     def __repr__(self):
         # return str(self.__dict__)
@@ -40,6 +49,9 @@ def get_team_name_and_score(soup, top_list_item_class_name):
     return team_name, team_score
 
 def get_commentary(soup):
+    global last_comment
+    global has_updates
+
     root_div_tags_children = soup.find("div", {"class":"content"})
     commentary = []
 
@@ -68,6 +80,20 @@ def get_commentary(soup):
             commentary.append(comment)
 
     commentary.reverse()
+    ind = -1
+
+    for i in range(len(commentary)):
+        if commentary[i] == last_comment:
+            ind = i
+            
+            break
+
+    commentary = commentary[(ind + 1) : len(commentary)]
+
+    if (len(commentary) > 0):
+        last_comment = commentary[-1]
+    else:
+        has_updates = False
 
     return commentary
 
@@ -78,7 +104,7 @@ but there are no timestamp fields in the HTML, and anyway the site loads just a 
 by scrolling, so there's no desperate need to implement this for now.
 """
 def get_match_info_from_espn(last_timestamp):
-    MATCH_URL = "http://www.espncricinfo.com/series/18693/commentary/1144993/australia-vs-india-1st-test-india-in-aus-2018-19"
+    MATCH_URL = "http://www.espncricinfo.com/series/18693/commentary/1144993/australia-vs-india-1st-test_scheduler-india-in-aus-2018-19"
     FIRST_TEAM_TOP_LIST_ITEM_CLASS_NAME = "cscore_item cscore_item--home"
     SECOND_TEAM_TOP_LIST_ITEM_CLASS_NAME = "cscore_item cscore_item--away"
 
@@ -109,10 +135,23 @@ def get_match_info():
 
     return info_string
 
+def test_scheduled_job(driver, names):
+    message_content = get_match_info()
+
+    if not has_updates:
+        message_content = "No new updates right now..."
+
+    print(message_content)
+
 def scheduled_job(driver, names):
+    global has_updates
+
     MESSAGE_BOX_CLASS_NAME = "_1Plpp"
     SEND_BUTTON_CLASS_NAME = "_35EW6"
     message_content = get_match_info()
+
+    if not has_updates:
+        message_content = "No new updates right now..."
 
     for name in names:
         user = driver.find_element_by_xpath("//span[@title = \"{}\"]".format(name))
@@ -124,22 +163,32 @@ def scheduled_job(driver, names):
         send_button = driver.find_element_by_class_name(SEND_BUTTON_CLASS_NAME)
         send_button.click()
 
+def test_scheduler():
+    scheduled_job(None, None)
+
+def scheduler(driver, names):
+    scheduled_job(driver, names)
+    schedule.every(2).minutes.do(scheduled_job, driver, names)
+    # schedule.every(10).seconds.do(scheduled_job, driver, names)
+
+    while (True):
+        schedule.run_pending()
+        time.sleep(1)
+
 def send_messages_on_whatsapp():
+    global last_comment
+    
+    last_comment = Comment("", "")
     URL = "https://web.whatsapp.com"
 
     driver = webdriver.Safari()
     driver.get(URL)
 
-    user_input = input("Enter the names of the groups/users you want to text, separated by commas(Eg. - Arya, Sansa, Jon, Bran, Rickon, Robb) : ")
+    user_input = input("Enter the names of the groups/users you want to text, separated by commas(Eg. - Arya Stark, Sansa Stark, Jon Snow, Bran, Rickon, Robb) : ")
     names = [x.strip() for x in user_input.split(',')]
 
-    scheduled_job(driver, names)
-    schedule.every(5).minutes.do(scheduled_job, driver, names)
-    # schedule.every(30).seconds.do(scheduled_job, driver, message_box)
-
-    while (True):
-        schedule.run_pending()
-        time.sleep(1)
+    # test_scheduler()
+    scheduler(driver, names)
 
 if __name__ == "__main__":
     send_messages_on_whatsapp()
