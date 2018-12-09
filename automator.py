@@ -1,9 +1,11 @@
 import urllib.request
 import schedule
+import datetime
 import time
 from bs4 import BeautifulSoup
 from selenium import webdriver
 
+match_start_time = ""
 last_comment = ""
 has_updates = True
 
@@ -122,6 +124,15 @@ def get_match_info_from_espn(last_timestamp):
     return match
 
 def get_match_info():
+    global match_start_time
+
+    current_time = datetime.datetime.now()
+
+    # the match hasn't started yet...
+    if current_time < match_start_time:
+        # return "The match hasn't started yet..."
+        return
+
     match = get_match_info_from_espn(None)
     info_string = "*{} - {}*".format(match.first_team, match.first_team_score)
     info_string += "\n*{} - {}*".format(match.second_team, match.second_team_score)
@@ -135,7 +146,7 @@ def get_match_info():
 
     return info_string
 
-def test_scheduled_job(driver, names):
+def test_scheduled_job():
     message_content = get_match_info()
 
     if not has_updates:
@@ -176,8 +187,11 @@ def scheduler(driver, names):
         time.sleep(1)
 
 def send_messages_on_whatsapp():
+    global match_start_time
     global last_comment
     
+    current_time = datetime.datetime.now()
+    match_start_time = current_time.replace(hour = 5, minute = 30, second = 0, microsecond = 0)
     last_comment = Comment("", "")
     URL = "https://web.whatsapp.com"
 
@@ -187,6 +201,7 @@ def send_messages_on_whatsapp():
     user_input = input("Enter the names of the groups/users you want to text, separated by commas(Eg. - Arya Stark, Sansa Stark, Jon Snow, Bran, Rickon, Robb) : ")
     names = [x.strip() for x in user_input.split(',')]
 
+    # test_scheduled_job()
     # test_scheduler()
     scheduler(driver, names)
 
