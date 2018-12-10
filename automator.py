@@ -4,6 +4,9 @@ import datetime
 import time
 from bs4 import BeautifulSoup
 from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 match_start_time = ""
 last_comment = ""
@@ -57,6 +60,8 @@ def get_commentary(soup):
     root_div_tags_children = soup.find("div", {"class":"content"})
     commentary = []
 
+    print("content.size {}".format(len(root_div_tags_children)))
+
     for commentary_item in root_div_tags_children:
         over = commentary_item.find("div", {"class":"time-stamp"})
         description = commentary_item.find("div", {"class":"description"})
@@ -74,9 +79,11 @@ def get_commentary(soup):
         comment = Comment(over, description)
         paragraphs = commentary_item.findAll("p", {"class":"comment"})
 
-        if (paragraphs is not None):
-            for p in paragraphs:
-                comment.add_paragraph(p.text)
+        if (paragraphs is None):
+            paragraphs = []
+
+        for p in paragraphs:
+            comment.add_paragraph(p.text)
 
         if (len(over) != 0 or len(description) != 0 or len(comment.paragraphs) != 0):
             commentary.append(comment)
@@ -85,10 +92,13 @@ def get_commentary(soup):
     ind = -1
 
     for i in range(len(commentary)):
-        if commentary[i] == last_comment:
+        if (commentary[i].over == last_comment.over):
             ind = i
             
             break
+
+    if (ind >= 0 and (commentary[ind].description != last_comment.description or commentary[ind].paragraphs != last_comment.paragraphs)):
+        ind -= 1
 
     commentary = commentary[(ind + 1) : len(commentary)]
 
@@ -124,15 +134,6 @@ def get_match_info_from_espn(last_timestamp):
     return match
 
 def get_match_info():
-    global match_start_time
-
-    current_time = datetime.datetime.now()
-
-    # the match hasn't started yet...
-    if current_time < match_start_time:
-        # return "The match hasn't started yet..."
-        return
-
     match = get_match_info_from_espn(None)
     info_string = "*{} - {}*".format(match.first_team, match.first_team_score)
     info_string += "\n*{} - {}*".format(match.second_team, match.second_team_score)
@@ -156,9 +157,18 @@ def test_scheduled_job():
 
 def scheduled_job(driver, names):
     global has_updates
+    global match_start_time
+
+    current_time = datetime.datetime.now()
+
+    # the match hasn't started yet...
+    if current_time < match_start_time:
+        # return "The match hasn't started yet..."
+        return
 
     MESSAGE_BOX_CLASS_NAME = "_1Plpp"
     SEND_BUTTON_CLASS_NAME = "_35EW6"
+    has_updates = True
     message_content = get_match_info()
 
     if not has_updates:
@@ -171,7 +181,13 @@ def scheduled_job(driver, names):
         message_box = driver.find_element_by_class_name(MESSAGE_BOX_CLASS_NAME)
         message_box.send_keys(message_content)
 
-        send_button = driver.find_element_by_class_name(SEND_BUTTON_CLASS_NAME)
+        if len(message_content) == 0:
+            continue
+
+        send_button = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.CLASS_NAME, SEND_BUTTON_CLASS_NAME))
+        )
+
         send_button.click()
 
 def test_scheduler():
@@ -192,7 +208,7 @@ def send_messages_on_whatsapp():
     
     current_time = datetime.datetime.now()
     match_start_time = current_time.replace(hour = 5, minute = 30, second = 0, microsecond = 0)
-    last_comment = Comment("", "")
+    last_comment = Comment("None", "No comment yet...")
     URL = "https://web.whatsapp.com"
 
     driver = webdriver.Safari()
