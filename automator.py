@@ -206,7 +206,7 @@ def send_messages_on_whatsapp():
     global last_comment
     
     current_time = datetime.datetime.now()
-    match_start_time = current_time.replace(hour = 5, minute = 30, second = 0, microsecond = 0)
+    match_start_time = current_time.replace(hour = properties.MATCH_START_HOURS, minute = properties.MATCH_START_MINUTES, second = 0, microsecond = 0)
     last_comment = Comment("None", "No comment yet...")
     URL = "https://web.whatsapp.com"
 
