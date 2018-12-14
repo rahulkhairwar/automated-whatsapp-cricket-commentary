@@ -170,19 +170,23 @@ def scheduled_job(driver, names):
         message_content = "No new updates right now..."
 
     for name in names:
-        user = driver.find_element_by_xpath("//span[@title = \"{}\"]".format(name))
+        user = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, "//span[@title = \"{}\"]".format(name)))
+        )
         user.click()
         
-        message_box = driver.find_element_by_class_name(MESSAGE_BOX_CLASS_NAME)
-        message_box.send_keys(message_content)
+        message_box = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.CLASS_NAME, MESSAGE_BOX_CLASS_NAME))
+        )
 
         if len(message_content) == 0:
             continue
 
+        message_box.send_keys(message_content)
+
         send_button = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.CLASS_NAME, SEND_BUTTON_CLASS_NAME))
         )
-
         send_button.click()
 
 def test_scheduler():
