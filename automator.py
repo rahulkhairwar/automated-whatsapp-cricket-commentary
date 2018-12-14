@@ -2,6 +2,7 @@ import urllib.request
 import schedule
 import datetime
 import time
+import properties
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -57,10 +58,9 @@ def get_commentary(soup):
     global last_comment
     global has_updates
 
-    root_div_tags_children = soup.find("div", {"class":"content"})
+    root_div_tags_children = soup.find("article", {"class":"sub-module match-commentary cricket"})
+    root_div_tags_children = root_div_tags_children.find("div", {"class":"content"})
     commentary = []
-
-    print("content.size {}".format(len(root_div_tags_children)))
 
     for commentary_item in root_div_tags_children:
         over = commentary_item.find("div", {"class":"time-stamp"})
@@ -110,17 +110,12 @@ def get_commentary(soup):
     return commentary
 
 """Function to parse ESPN's Cricinfo website, and fetch match details using other functions.
-
-Can use the last_timestamp variable to get comments made only after the timestamp of the last comment fetched previously,
-but there are no timestamp fields in the HTML, and anyway the site loads just a few comments, while more load on the go
-by scrolling, so there's no desperate need to implement this for now.
 """
 def get_match_info_from_espn(last_timestamp):
-    MATCH_URL = "http://www.espncricinfo.com/series/18693/commentary/1144993/australia-vs-india-1st-test_scheduler-india-in-aus-2018-19"
     FIRST_TEAM_TOP_LIST_ITEM_CLASS_NAME = "cscore_item cscore_item--home"
     SECOND_TEAM_TOP_LIST_ITEM_CLASS_NAME = "cscore_item cscore_item--away"
 
-    request = urllib.request.Request(MATCH_URL)
+    request = urllib.request.Request(properties.MATCH_URL)
     response = urllib.request.urlopen(request)
 
     page_content = response.read().decode("utf-8")
