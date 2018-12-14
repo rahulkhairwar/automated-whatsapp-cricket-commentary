@@ -5,4 +5,4 @@ Easily configurable as per one's own use-case, can change -
 `(P.S.: ESPN Cricinfo only. Will have to dig into the HTML again for another site, for now I'm fine with just this one!)`
 - Display options.
 
-<h1>Have fun! :)<h1>
+<h3>Have fun! :)<h3>
