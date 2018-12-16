@@ -115,21 +115,34 @@ def get_match_info_from_espn(last_timestamp):
     FIRST_TEAM_TOP_LIST_ITEM_CLASS_NAME = "cscore_item cscore_item--home"
     SECOND_TEAM_TOP_LIST_ITEM_CLASS_NAME = "cscore_item cscore_item--away"
 
-    request = urllib.request.Request(properties.MATCH_URL)
-    response = urllib.request.urlopen(request)
+    try:
+        request = urllib.request.Request(properties.MATCH_URL)
+        response = urllib.request.urlopen(request)
 
-    page_content = response.read().decode("utf-8")
-    soup = BeautifulSoup(page_content, "html.parser")
+        page_content = response.read().decode("utf-8")
+        soup = BeautifulSoup(page_content, "html.parser")
 
-    first_team_name, first_team_score = get_team_name_and_score(soup, FIRST_TEAM_TOP_LIST_ITEM_CLASS_NAME)
-    second_team_name, second_team_score = get_team_name_and_score(soup, SECOND_TEAM_TOP_LIST_ITEM_CLASS_NAME)
-    match = Match(first_team_name, second_team_name, first_team_score, second_team_score)
-    match.commentary = get_commentary(soup)
+        first_team_name, first_team_score = get_team_name_and_score(soup, FIRST_TEAM_TOP_LIST_ITEM_CLASS_NAME)
+        second_team_name, second_team_score = get_team_name_and_score(soup, SECOND_TEAM_TOP_LIST_ITEM_CLASS_NAME)
+        match = Match(first_team_name, second_team_name, first_team_score, second_team_score)
+        match.commentary = get_commentary(soup)
 
-    return match
+        return match
+    except ConnectionResetError:
+        print("Connection reset...")
+
+        return None
 
 def get_match_info():
+    global has_updates
+
     match = get_match_info_from_espn(None)
+
+    if (match == None):
+        has_updates = False
+
+        return ""
+
     info_string = "*{} - {}*".format(match.first_team, match.first_team_score)
     info_string += "\n*{} - {}*".format(match.second_team, match.second_team_score)
     
@@ -141,14 +154,6 @@ def get_match_info():
                 info_string += "\n{}".format(p)
 
     return info_string
-
-def test_scheduled_job():
-    message_content = get_match_info()
-
-    if not has_updates:
-        message_content = "No new updates right now..."
-
-    print(message_content)
 
 def scheduled_job(driver, names):
     global has_updates
@@ -189,9 +194,6 @@ def scheduled_job(driver, names):
         )
         send_button.click()
 
-def test_scheduler():
-    scheduled_job(None, None)
-
 def scheduler(driver, names):
     scheduled_job(driver, names)
     schedule.every(2).minutes.do(scheduled_job, driver, names)
@@ -215,9 +217,6 @@ def send_messages_on_whatsapp():
 
     user_input = input("Enter the names of the groups/users you want to text, separated by commas(Eg. - Arya Stark, Sansa Stark, Jon Snow, Bran, Rickon, Robb) : ")
     names = [x.strip() for x in user_input.split(',')]
-
-    # test_scheduled_job()
-    # test_scheduler()
     scheduler(driver, names)
 
 if __name__ == "__main__":
