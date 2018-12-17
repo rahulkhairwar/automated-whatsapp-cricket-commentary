@@ -128,8 +128,11 @@ def get_match_info_from_espn(last_timestamp):
         match.commentary = get_commentary(soup)
 
         return match
-    except ConnectionResetError:
-        print("Connection reset...")
+    except (ConnectionResetError, urllib.error.URLError) as e:
+        if e is ConnectionResetError:
+            print("Connection reset...")
+        else:
+            print("Check your internet connection, aborting job for this schedule...")
 
         return None
 
