@@ -100,12 +100,12 @@ def get_commentary(soup):
         if (over is None):
             over = ""
         else:
-            over = over.text
+            over = over.text.replace("\"", "'")
 
         if (description is None):
             description = ""
         else:
-            description = description.text
+            description = description.text.replace("\"", "'")
 
         comment = Comment(over, description)
         paragraphs = commentary_item.findAll("p", {"class": "comment"})
@@ -114,7 +114,7 @@ def get_commentary(soup):
             paragraphs = []
 
         for p in paragraphs:
-            comment.add_paragraph(p.text)
+            comment.add_paragraph(p.text.replace("\"", "'"))
 
         if (len(over) != 0 or len(description) != 0 or len(comment.paragraphs) != 0):
             commentary.append(comment)
@@ -225,22 +225,27 @@ def scheduled_job(driver, names):
             EC.presence_of_element_located(
                 (By.XPATH, "//span[@title = \"{}\"]".format(name)))
         )
+        logging.debug("user found")
         user.click()
 
         message_box = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located(
                 (By.CLASS_NAME, MESSAGE_BOX_CLASS_NAME))
         )
+        logging.debug("message_box found")
 
         if len(message_content) == 0:
             continue
-
+        
         message_box.send_keys(message_content)
+        # message_box.text = message_content
 
+        logging.debug("will wait to locate send_button...")
         send_button = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located(
                 (By.CLASS_NAME, SEND_BUTTON_CLASS_NAME))
         )
+        logging.debug("send_button found")
         send_button.click()
 
 
