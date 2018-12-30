@@ -14,7 +14,7 @@ match_start_time = ""
 match_end_time = ""
 last_comment = ""
 has_updates = True
-
+LOGGER = ""
 
 class Match:
     def __init__(self, first_team, second_team, first_team_score, second_team_score):
@@ -48,15 +48,38 @@ class Comment:
         return "over : {}, desc : {}, paras : {}".format(self.over, self.description, self.paragraphs)
 
 
-class Logger(logging.getLoggerClass()):
+# class Logger(logging.getLoggerClass()):
+class Logger():
     def __init__(self, log_filename):
-        self.log_filename = log_filename
-        # self.logging = 
+        logging.basicConfig(filename=log_filename, level=logging.DEBUG)
 
-    def log_with_current_time(self, message):
-        current_time = datetime.datetime.now()
-        logging.debug("{} => {}".format(current_time, message))
-        # logging.
+    def debug_with_time(self, message):
+        logging.debug("{} => {}".format(get_current_time(), message))
+    
+    def debug(self, message):
+        logging.debug(message)
+
+    def info_with_time(self, message):
+        logging.info("{} => {}".format(get_current_time(), message))
+
+    def info(self, message):
+        logging.info(message)
+
+    def error_with_time(self, message):
+        logging.error("{} => {}".format(get_current_time(), message))
+
+    def error(self, message):
+        logging.error(message)
+
+    def exception_with_time(self, message):
+        logging.exception("{} => {}".format(get_current_time(), message))
+
+    def exception(self, message):
+        logging.exception(message)
+
+
+def get_current_time():
+    return datetime.datetime.now()
 
 
 def get_team_name_and_score(soup, top_list_item_class_name):
@@ -84,9 +107,7 @@ def get_commentary(soup):
             "article", {"class": "sub-module match-commentary cricket add-padding"})
 
     if (root_div_tags_children is None):
-        current_time = datetime.datetime.now()
-        logging.error("{} => Couldn't find article class. Aborting.".format(current_time))
-        # print("Couldn't find article class. Aborting...")
+        LOGGER.error_with_time("Couldn't find article class. Aborting.")
         exit(1)
 
     root_div_tags_children = root_div_tags_children.find(
@@ -100,12 +121,17 @@ def get_commentary(soup):
         if (over is None):
             over = ""
         else:
-            over = over.text.replace("\"", "'")
+            over = over.text
+            # over = over.text.replace("\"", "'")
 
         if (description is None):
             description = ""
         else:
-            description = description.text.replace("\"", "'")
+            if properties.IS_TEST_MODE:
+                description = ""
+            else:
+                description = description.text
+            # description = description.text.replace("\"", "'")
 
         comment = Comment(over, description)
         paragraphs = commentary_item.findAll("p", {"class": "comment"})
@@ -113,8 +139,10 @@ def get_commentary(soup):
         if (paragraphs is None):
             paragraphs = []
 
-        for p in paragraphs:
-            comment.add_paragraph(p.text.replace("\"", "'"))
+        if not properties.IS_TEST_MODE:
+            for p in paragraphs:
+                comment.add_paragraph(p.text)
+                # comment.add_paragraph(p.text.replace("\"", "'"))
 
         if (len(over) != 0 or len(description) != 0 or len(comment.paragraphs) != 0):
             commentary.append(comment)
@@ -164,16 +192,9 @@ def get_match_info_from_espn(last_timestamp):
 
         return match
     except (ConnectionResetError, urllib.error.URLError) as e:
-        current_time = datetime.datetime.now()
-        logging.exception("{} => {}".format(current_time, e))
+        LOGGER.exception_with_time(e)
 
         return None
-
-"""         if e is ConnectionResetError:
-            print("Connection reset...")
-        else:
-            print("Check your internet connection, aborting job for this schedule...") """
-
 
 
 def get_match_info():
@@ -205,7 +226,7 @@ def scheduled_job(driver, names):
 
     current_time = datetime.datetime.now()
     # print("entered scheduled_job")
-    logging.debug("{} => Entered scheduled_job...".format(current_time))
+    LOGGER.debug_with_time("Entered scheduled_job...")
 
     # the match hasn't started yet...
     if current_time < match_start_time or current_time > match_end_time:
@@ -225,14 +246,14 @@ def scheduled_job(driver, names):
             EC.presence_of_element_located(
                 (By.XPATH, "//span[@title = \"{}\"]".format(name)))
         )
-        logging.debug("user found")
+        LOGGER.debug_with_time("User found!")
         user.click()
 
         message_box = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located(
                 (By.CLASS_NAME, MESSAGE_BOX_CLASS_NAME))
         )
-        logging.debug("message_box found")
+        LOGGER.debug_with_time("Message box found!")
 
         if len(message_content) == 0:
             continue
@@ -240,12 +261,12 @@ def scheduled_job(driver, names):
         message_box.send_keys(message_content)
         # message_box.text = message_content
 
-        logging.debug("will wait to locate send_button...")
+        LOGGER.debug_with_time("Will wait to locate send_button...")
         send_button = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located(
                 (By.CLASS_NAME, SEND_BUTTON_CLASS_NAME))
         )
-        logging.debug("send_button found")
+        LOGGER.debug("send_button found!")
         send_button.click()
 
 
@@ -280,8 +301,9 @@ def send_messages_on_whatsapp():
 
 
 def init_logger():
-    logging.basicConfig(filename=properties.LOG_FILENAME, level=logging.DEBUG)
-    logging.debug('The logfile has been set up.')
+    global LOGGER
+
+    LOGGER = Logger(properties.LOG_FILENAME)
 
 
 if __name__ == "__main__":

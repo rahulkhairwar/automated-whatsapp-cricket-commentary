@@ -1,0 +1,135 @@
+DEBUG:selenium.webdriver.remote.remote_connection:POST http://127.0.0.1:62422/session {"capabilities": {"firstMatch": [{}], "alwaysMatch": {"browserName": "safari", "platformName": "mac"}}, "desiredCapabilities": {"browserName": "safari", "version": "", "platform": "MAC"}}
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1:62422
+DEBUG:urllib3.connectionpool:http://127.0.0.1:62422 "POST /session HTTP/1.1" 200 200
+DEBUG:selenium.webdriver.remote.remote_connection:Finished Request
+DEBUG:selenium.webdriver.remote.remote_connection:POST http://127.0.0.1:62422/session/D3A0A373-7C66-4FEA-861E-FA140057713D/url {"url": "https://web.whatsapp.com"}
+DEBUG:urllib3.connectionpool:http://127.0.0.1:62422 "POST /session/D3A0A373-7C66-4FEA-861E-FA140057713D/url HTTP/1.1" 200 14
+DEBUG:selenium.webdriver.remote.remote_connection:Finished Request
+DEBUG:root:2018-12-30 06:55:03.123182 => Entered scheduled_job...
+DEBUG:selenium.webdriver.remote.remote_connection:POST http://127.0.0.1:62422/session/D3A0A373-7C66-4FEA-861E-FA140057713D/element {"using": "xpath", "value": "//span[@title = \"My Own Vodafone\"]"}
+DEBUG:urllib3.connectionpool:http://127.0.0.1:62422 "POST /session/D3A0A373-7C66-4FEA-861E-FA140057713D/element HTTP/1.1" 200 93
+DEBUG:selenium.webdriver.remote.remote_connection:Finished Request
+DEBUG:root:2018-12-30 06:55:05.690096 => User found!
+DEBUG:selenium.webdriver.remote.remote_connection:POST http://127.0.0.1:62422/session/D3A0A373-7C66-4FEA-861E-FA140057713D/element/node-486A627D-EF41-4BED-9961-182EA6909E37/click {"id": "node-486A627D-EF41-4BED-9961-182EA6909E37"}
+DEBUG:urllib3.connectionpool:http://127.0.0.1:62422 "POST /session/D3A0A373-7C66-4FEA-861E-FA140057713D/element/node-486A627D-EF41-4BED-9961-182EA6909E37/click HTTP/1.1" 200 14
+DEBUG:selenium.webdriver.remote.remote_connection:Finished Request
+DEBUG:selenium.webdriver.remote.remote_connection:POST http://127.0.0.1:62422/session/D3A0A373-7C66-4FEA-861E-FA140057713D/element {"using": "css selector", "value": "._1Plpp"}
+DEBUG:urllib3.connectionpool:http://127.0.0.1:62422 "POST /session/D3A0A373-7C66-4FEA-861E-FA140057713D/element HTTP/1.1" 200 93
+DEBUG:selenium.webdriver.remote.remote_connection:Finished Request
+DEBUG:root:2018-12-30 06:55:05.912264 => Message box found!
+DEBUG:selenium.webdriver.remote.remote_connection:POST http://127.0.0.1:62422/session/D3A0A373-7C66-4FEA-861E-FA140057713D/element/node-27607DCC-8F22-4CAE-9663-83A57F9EA227/value {"text": "No new updates right now...", "value": ["N", "o", " ", "n", "e", "w", " ", "u", "p", "d", "a", "t", "e", "s", " ", "r", "i", "g", "h", "t", " ", "n", "o", "w", ".", ".", "."], "id": "node-27607DCC-8F22-4CAE-9663-83A57F9EA227"}
+DEBUG:urllib3.connectionpool:http://127.0.0.1:62422 "POST /session/D3A0A373-7C66-4FEA-861E-FA140057713D/element/node-27607DCC-8F22-4CAE-9663-83A57F9EA227/value HTTP/1.1" 200 14
+DEBUG:selenium.webdriver.remote.remote_connection:Finished Request
+DEBUG:root:2018-12-30 06:55:07.500555 => Will wait to locate send_button...
+DEBUG:selenium.webdriver.remote.remote_connection:POST http://127.0.0.1:62422/session/D3A0A373-7C66-4FEA-861E-FA140057713D/element {"using": "css selector", "value": "._35EW6"}
+DEBUG:urllib3.connectionpool:http://127.0.0.1:62422 "POST /session/D3A0A373-7C66-4FEA-861E-FA140057713D/element HTTP/1.1" 200 93
+DEBUG:selenium.webdriver.remote.remote_connection:Finished Request
+DEBUG:root:send_button found!
+DEBUG:selenium.webdriver.remote.remote_connection:POST http://127.0.0.1:62422/session/D3A0A373-7C66-4FEA-861E-FA140057713D/element/node-ACC7E2BF-249E-4421-9BCC-80E7CC0553EB/click {"id": "node-ACC7E2BF-249E-4421-9BCC-80E7CC0553EB"}
+DEBUG:urllib3.connectionpool:http://127.0.0.1:62422 "POST /session/D3A0A373-7C66-4FEA-861E-FA140057713D/element/node-ACC7E2BF-249E-4421-9BCC-80E7CC0553EB/click HTTP/1.1" 200 14
+DEBUG:selenium.webdriver.remote.remote_connection:Finished Request
+INFO:schedule:Running job Every 2 minutes do scheduled_job(<selenium.webdriver.safari.webdriver.WebDriver (session="D3A0A373-7C66-4FEA-861E-FA140057713D")>, ['My Own Vodafone']) (last run: [never], next run: 2018-12-30 06:57:07)
+DEBUG:root:2018-12-30 06:57:08.046575 => Entered scheduled_job...
+DEBUG:selenium.webdriver.remote.remote_connection:POST http://127.0.0.1:62422/session/D3A0A373-7C66-4FEA-861E-FA140057713D/element {"using": "xpath", "value": "//span[@title = \"My Own Vodafone\"]"}
+DEBUG:urllib3.connectionpool:Resetting dropped connection: 127.0.0.1
+DEBUG:urllib3.connectionpool:http://127.0.0.1:62422 "POST /session/D3A0A373-7C66-4FEA-861E-FA140057713D/element HTTP/1.1" 200 93
+DEBUG:selenium.webdriver.remote.remote_connection:Finished Request
+DEBUG:root:2018-12-30 06:57:10.674296 => User found!
+DEBUG:selenium.webdriver.remote.remote_connection:POST http://127.0.0.1:62422/session/D3A0A373-7C66-4FEA-861E-FA140057713D/element/node-486A627D-EF41-4BED-9961-182EA6909E37/click {"id": "node-486A627D-EF41-4BED-9961-182EA6909E37"}
+DEBUG:urllib3.connectionpool:http://127.0.0.1:62422 "POST /session/D3A0A373-7C66-4FEA-861E-FA140057713D/element/node-486A627D-EF41-4BED-9961-182EA6909E37/click HTTP/1.1" 200 14
+DEBUG:selenium.webdriver.remote.remote_connection:Finished Request
+DEBUG:selenium.webdriver.remote.remote_connection:POST http://127.0.0.1:62422/session/D3A0A373-7C66-4FEA-861E-FA140057713D/element {"using": "css selector", "value": "._1Plpp"}
+DEBUG:urllib3.connectionpool:http://127.0.0.1:62422 "POST /session/D3A0A373-7C66-4FEA-861E-FA140057713D/element HTTP/1.1" 200 93
+DEBUG:selenium.webdriver.remote.remote_connection:Finished Request
+DEBUG:root:2018-12-30 06:57:10.706583 => Message box found!
+DEBUG:selenium.webdriver.remote.remote_connection:POST http://127.0.0.1:62422/session/D3A0A373-7C66-4FEA-861E-FA140057713D/element/node-27607DCC-8F22-4CAE-9663-83A57F9EA227/value {"text": "No new updates right now...", "value": ["N", "o", " ", "n", "e", "w", " ", "u", "p", "d", "a", "t", "e", "s", " ", "r", "i", "g", "h", "t", " ", "n", "o", "w", ".", ".", "."], "id": "node-27607DCC-8F22-4CAE-9663-83A57F9EA227"}
+DEBUG:urllib3.connectionpool:http://127.0.0.1:62422 "POST /session/D3A0A373-7C66-4FEA-861E-FA140057713D/element/node-27607DCC-8F22-4CAE-9663-83A57F9EA227/value HTTP/1.1" 200 14
+DEBUG:selenium.webdriver.remote.remote_connection:Finished Request
+DEBUG:root:2018-12-30 06:57:10.913322 => Will wait to locate send_button...
+DEBUG:selenium.webdriver.remote.remote_connection:POST http://127.0.0.1:62422/session/D3A0A373-7C66-4FEA-861E-FA140057713D/element {"using": "css selector", "value": "._35EW6"}
+DEBUG:urllib3.connectionpool:http://127.0.0.1:62422 "POST /session/D3A0A373-7C66-4FEA-861E-FA140057713D/element HTTP/1.1" 200 93
+DEBUG:selenium.webdriver.remote.remote_connection:Finished Request
+DEBUG:root:send_button found!
+DEBUG:selenium.webdriver.remote.remote_connection:POST http://127.0.0.1:62422/session/D3A0A373-7C66-4FEA-861E-FA140057713D/element/node-8BE510F0-96F2-4ADE-AD7C-54D51FF5D228/click {"id": "node-8BE510F0-96F2-4ADE-AD7C-54D51FF5D228"}
+DEBUG:urllib3.connectionpool:http://127.0.0.1:62422 "POST /session/D3A0A373-7C66-4FEA-861E-FA140057713D/element/node-8BE510F0-96F2-4ADE-AD7C-54D51FF5D228/click HTTP/1.1" 200 14
+DEBUG:selenium.webdriver.remote.remote_connection:Finished Request
+DEBUG:selenium.webdriver.remote.remote_connection:POST http://127.0.0.1:62503/session {"capabilities": {"firstMatch": [{}], "alwaysMatch": {"browserName": "safari", "platformName": "mac"}}, "desiredCapabilities": {"browserName": "safari", "version": "", "platform": "MAC"}}
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1:62503
+DEBUG:urllib3.connectionpool:http://127.0.0.1:62503 "POST /session HTTP/1.1" 200 200
+DEBUG:selenium.webdriver.remote.remote_connection:Finished Request
+DEBUG:selenium.webdriver.remote.remote_connection:POST http://127.0.0.1:62503/session/CD760C70-F381-4DF7-8FD7-7D05DEC56481/url {"url": "https://web.whatsapp.com"}
+DEBUG:urllib3.connectionpool:http://127.0.0.1:62503 "POST /session/CD760C70-F381-4DF7-8FD7-7D05DEC56481/url HTTP/1.1" 200 14
+DEBUG:selenium.webdriver.remote.remote_connection:Finished Request
+DEBUG:root:2018-12-30 06:59:38.722327 => Entered scheduled_job...
+DEBUG:selenium.webdriver.remote.remote_connection:POST http://127.0.0.1:62503/session/CD760C70-F381-4DF7-8FD7-7D05DEC56481/element {"using": "xpath", "value": "//span[@title = \"My Own Vodafone\"]"}
+DEBUG:urllib3.connectionpool:http://127.0.0.1:62503 "POST /session/CD760C70-F381-4DF7-8FD7-7D05DEC56481/element HTTP/1.1" 200 93
+DEBUG:selenium.webdriver.remote.remote_connection:Finished Request
+DEBUG:root:2018-12-30 06:59:41.506600 => User found!
+DEBUG:selenium.webdriver.remote.remote_connection:POST http://127.0.0.1:62503/session/CD760C70-F381-4DF7-8FD7-7D05DEC56481/element/node-5C3C53B6-0BF7-479F-877D-518E47EBE283/click {"id": "node-5C3C53B6-0BF7-479F-877D-518E47EBE283"}
+DEBUG:urllib3.connectionpool:http://127.0.0.1:62503 "POST /session/CD760C70-F381-4DF7-8FD7-7D05DEC56481/element/node-5C3C53B6-0BF7-479F-877D-518E47EBE283/click HTTP/1.1" 200 14
+DEBUG:selenium.webdriver.remote.remote_connection:Finished Request
+DEBUG:selenium.webdriver.remote.remote_connection:POST http://127.0.0.1:62503/session/CD760C70-F381-4DF7-8FD7-7D05DEC56481/element {"using": "css selector", "value": "._1Plpp"}
+DEBUG:urllib3.connectionpool:http://127.0.0.1:62503 "POST /session/CD760C70-F381-4DF7-8FD7-7D05DEC56481/element HTTP/1.1" 200 93
+DEBUG:selenium.webdriver.remote.remote_connection:Finished Request
+DEBUG:root:2018-12-30 06:59:41.738521 => Message box found!
+DEBUG:selenium.webdriver.remote.remote_connection:POST http://127.0.0.1:62503/session/CD760C70-F381-4DF7-8FD7-7D05DEC56481/element/node-537FB043-9641-4D15-8656-9158D41AD374/value {"text": "*India - 443/7d & 106/8d*\n*Australia - 151 & 258/8 * (85 ov, target 399)*\n*83.1* - \n*83.2* - \n*83.3* - \n*83.4* - \n*83.5* - \n*83.6* - \n*84.1* - \n*84.2* - \n*84.3* - \n*84.4* - \n*84.5* - \n*84.6* - ", "value": ["*", "I", "n", "d", "i", "a", " ", "-", " ", "4", "4", "3", "/", "7", "d", " ", "&", " ", "1", "0", "6", "/", "8", "d", "*", "\n", "*", "A", "u", "s", "t", "r", "a", "l", "i", "a", " ", "-", " ", "1", "5", "1", " ", "&", " ", "2", "5", "8", "/", "8", " ", "*", " ", "(", "8", "5", " ", "o", "v", ",", " ", "t", "a", "r", "g", "e", "t", " ", "3", "9", "9", ")", "*", "\n", "*", "8", "3", ".", "1", "*", " ", "-", " ", "\n", "*", "8", "3", ".", "2", "*", " ", "-", " ", "\n", "*", "8", "3", ".", "3", "*", " ", "-", " ", "\n", "*", "8", "3", ".", "4", "*", " ", "-", " ", "\n", "*", "8", "3", ".", "5", "*", " ", "-", " ", "\n", "*", "8", "3", ".", "6", "*", " ", "-", " ", "\n", "*", "8", "4", ".", "1", "*", " ", "-", " ", "\n", "*", "8", "4", ".", "2", "*", " ", "-", " ", "\n", "*", "8", "4", ".", "3", "*", " ", "-", " ", "\n", "*", "8", "4", ".", "4", "*", " ", "-", " ", "\n", "*", "8", "4", ".", "5", "*", " ", "-", " ", "\n", "*", "8", "4", ".", "6", "*", " ", "-", " "], "id": "node-537FB043-9641-4D15-8656-9158D41AD374"}
+DEBUG:urllib3.connectionpool:http://127.0.0.1:62503 "POST /session/CD760C70-F381-4DF7-8FD7-7D05DEC56481/element/node-537FB043-9641-4D15-8656-9158D41AD374/value HTTP/1.1" 200 14
+DEBUG:selenium.webdriver.remote.remote_connection:Finished Request
+DEBUG:root:2018-12-30 06:59:43.587258 => Will wait to locate send_button...
+DEBUG:selenium.webdriver.remote.remote_connection:POST http://127.0.0.1:62503/session/CD760C70-F381-4DF7-8FD7-7D05DEC56481/element {"using": "css selector", "value": "._35EW6"}
+DEBUG:urllib3.connectionpool:http://127.0.0.1:62503 "POST /session/CD760C70-F381-4DF7-8FD7-7D05DEC56481/element HTTP/1.1" 200 93
+DEBUG:selenium.webdriver.remote.remote_connection:Finished Request
+DEBUG:root:send_button found!
+DEBUG:selenium.webdriver.remote.remote_connection:POST http://127.0.0.1:62503/session/CD760C70-F381-4DF7-8FD7-7D05DEC56481/element/node-625B904D-6501-4A14-9C8E-16E131F743C5/click {"id": "node-625B904D-6501-4A14-9C8E-16E131F743C5"}
+DEBUG:urllib3.connectionpool:http://127.0.0.1:62503 "POST /session/CD760C70-F381-4DF7-8FD7-7D05DEC56481/element/node-625B904D-6501-4A14-9C8E-16E131F743C5/click HTTP/1.1" 200 14
+DEBUG:selenium.webdriver.remote.remote_connection:Finished Request
+INFO:schedule:Running job Every 2 minutes do scheduled_job(<selenium.webdriver.safari.webdriver.WebDriver (session="CD760C70-F381-4DF7-8FD7-7D05DEC56481")>, ['My Own Vodafone']) (last run: [never], next run: 2018-12-30 07:01:43)
+DEBUG:root:2018-12-30 07:01:44.059012 => Entered scheduled_job...
+DEBUG:selenium.webdriver.remote.remote_connection:POST http://127.0.0.1:62503/session/CD760C70-F381-4DF7-8FD7-7D05DEC56481/element {"using": "xpath", "value": "//span[@title = \"My Own Vodafone\"]"}
+DEBUG:urllib3.connectionpool:Resetting dropped connection: 127.0.0.1
+DEBUG:urllib3.connectionpool:http://127.0.0.1:62503 "POST /session/CD760C70-F381-4DF7-8FD7-7D05DEC56481/element HTTP/1.1" 200 93
+DEBUG:selenium.webdriver.remote.remote_connection:Finished Request
+DEBUG:root:2018-12-30 07:01:46.379460 => User found!
+DEBUG:selenium.webdriver.remote.remote_connection:POST http://127.0.0.1:62503/session/CD760C70-F381-4DF7-8FD7-7D05DEC56481/element/node-5C3C53B6-0BF7-479F-877D-518E47EBE283/click {"id": "node-5C3C53B6-0BF7-479F-877D-518E47EBE283"}
+DEBUG:urllib3.connectionpool:http://127.0.0.1:62503 "POST /session/CD760C70-F381-4DF7-8FD7-7D05DEC56481/element/node-5C3C53B6-0BF7-479F-877D-518E47EBE283/click HTTP/1.1" 200 14
+DEBUG:selenium.webdriver.remote.remote_connection:Finished Request
+DEBUG:selenium.webdriver.remote.remote_connection:POST http://127.0.0.1:62503/session/CD760C70-F381-4DF7-8FD7-7D05DEC56481/element {"using": "css selector", "value": "._1Plpp"}
+DEBUG:urllib3.connectionpool:http://127.0.0.1:62503 "POST /session/CD760C70-F381-4DF7-8FD7-7D05DEC56481/element HTTP/1.1" 200 93
+DEBUG:selenium.webdriver.remote.remote_connection:Finished Request
+DEBUG:root:2018-12-30 07:01:46.402284 => Message box found!
+DEBUG:selenium.webdriver.remote.remote_connection:POST http://127.0.0.1:62503/session/CD760C70-F381-4DF7-8FD7-7D05DEC56481/element/node-537FB043-9641-4D15-8656-9158D41AD374/value {"text": "No new updates right now...", "value": ["N", "o", " ", "n", "e", "w", " ", "u", "p", "d", "a", "t", "e", "s", " ", "r", "i", "g", "h", "t", " ", "n", "o", "w", ".", ".", "."], "id": "node-537FB043-9641-4D15-8656-9158D41AD374"}
+DEBUG:urllib3.connectionpool:http://127.0.0.1:62503 "POST /session/CD760C70-F381-4DF7-8FD7-7D05DEC56481/element/node-537FB043-9641-4D15-8656-9158D41AD374/value HTTP/1.1" 200 14
+DEBUG:selenium.webdriver.remote.remote_connection:Finished Request
+DEBUG:root:2018-12-30 07:01:46.695154 => Will wait to locate send_button...
+DEBUG:selenium.webdriver.remote.remote_connection:POST http://127.0.0.1:62503/session/CD760C70-F381-4DF7-8FD7-7D05DEC56481/element {"using": "css selector", "value": "._35EW6"}
+DEBUG:urllib3.connectionpool:http://127.0.0.1:62503 "POST /session/CD760C70-F381-4DF7-8FD7-7D05DEC56481/element HTTP/1.1" 200 93
+DEBUG:selenium.webdriver.remote.remote_connection:Finished Request
+DEBUG:root:send_button found!
+DEBUG:selenium.webdriver.remote.remote_connection:POST http://127.0.0.1:62503/session/CD760C70-F381-4DF7-8FD7-7D05DEC56481/element/node-8BA561D1-2993-47BC-9F0D-1BAE57278627/click {"id": "node-8BA561D1-2993-47BC-9F0D-1BAE57278627"}
+DEBUG:urllib3.connectionpool:http://127.0.0.1:62503 "POST /session/CD760C70-F381-4DF7-8FD7-7D05DEC56481/element/node-8BA561D1-2993-47BC-9F0D-1BAE57278627/click HTTP/1.1" 200 14
+DEBUG:selenium.webdriver.remote.remote_connection:Finished Request
+INFO:schedule:Running job Every 2 minutes do scheduled_job(<selenium.webdriver.safari.webdriver.WebDriver (session="CD760C70-F381-4DF7-8FD7-7D05DEC56481")>, ['My Own Vodafone']) (last run: 2018-12-30 07:01:46, next run: 2018-12-30 07:03:46)
+DEBUG:root:2018-12-30 07:03:47.109082 => Entered scheduled_job...
+DEBUG:selenium.webdriver.remote.remote_connection:POST http://127.0.0.1:62503/session/CD760C70-F381-4DF7-8FD7-7D05DEC56481/element {"using": "xpath", "value": "//span[@title = \"My Own Vodafone\"]"}
+DEBUG:urllib3.connectionpool:Resetting dropped connection: 127.0.0.1
+DEBUG:urllib3.connectionpool:http://127.0.0.1:62503 "POST /session/CD760C70-F381-4DF7-8FD7-7D05DEC56481/element HTTP/1.1" 200 93
+DEBUG:selenium.webdriver.remote.remote_connection:Finished Request
+DEBUG:root:2018-12-30 07:03:49.423005 => User found!
+DEBUG:selenium.webdriver.remote.remote_connection:POST http://127.0.0.1:62503/session/CD760C70-F381-4DF7-8FD7-7D05DEC56481/element/node-5C3C53B6-0BF7-479F-877D-518E47EBE283/click {"id": "node-5C3C53B6-0BF7-479F-877D-518E47EBE283"}
+DEBUG:urllib3.connectionpool:http://127.0.0.1:62503 "POST /session/CD760C70-F381-4DF7-8FD7-7D05DEC56481/element/node-5C3C53B6-0BF7-479F-877D-518E47EBE283/click HTTP/1.1" 200 14
+DEBUG:selenium.webdriver.remote.remote_connection:Finished Request
+DEBUG:selenium.webdriver.remote.remote_connection:POST http://127.0.0.1:62503/session/CD760C70-F381-4DF7-8FD7-7D05DEC56481/element {"using": "css selector", "value": "._1Plpp"}
+DEBUG:urllib3.connectionpool:http://127.0.0.1:62503 "POST /session/CD760C70-F381-4DF7-8FD7-7D05DEC56481/element HTTP/1.1" 200 93
+DEBUG:selenium.webdriver.remote.remote_connection:Finished Request
+DEBUG:root:2018-12-30 07:03:49.483510 => Message box found!
+DEBUG:selenium.webdriver.remote.remote_connection:POST http://127.0.0.1:62503/session/CD760C70-F381-4DF7-8FD7-7D05DEC56481/element/node-537FB043-9641-4D15-8656-9158D41AD374/value {"text": "No new updates right now...", "value": ["N", "o", " ", "n", "e", "w", " ", "u", "p", "d", "a", "t", "e", "s", " ", "r", "i", "g", "h", "t", " ", "n", "o", "w", ".", ".", "."], "id": "node-537FB043-9641-4D15-8656-9158D41AD374"}
+DEBUG:urllib3.connectionpool:http://127.0.0.1:62503 "POST /session/CD760C70-F381-4DF7-8FD7-7D05DEC56481/element/node-537FB043-9641-4D15-8656-9158D41AD374/value HTTP/1.1" 200 14
+DEBUG:selenium.webdriver.remote.remote_connection:Finished Request
+DEBUG:root:2018-12-30 07:03:49.746989 => Will wait to locate send_button...
+DEBUG:selenium.webdriver.remote.remote_connection:POST http://127.0.0.1:62503/session/CD760C70-F381-4DF7-8FD7-7D05DEC56481/element {"using": "css selector", "value": "._35EW6"}
+DEBUG:urllib3.connectionpool:http://127.0.0.1:62503 "POST /session/CD760C70-F381-4DF7-8FD7-7D05DEC56481/element HTTP/1.1" 200 93
+DEBUG:selenium.webdriver.remote.remote_connection:Finished Request
+DEBUG:root:send_button found!
+DEBUG:selenium.webdriver.remote.remote_connection:POST http://127.0.0.1:62503/session/CD760C70-F381-4DF7-8FD7-7D05DEC56481/element/node-8BA561D1-2993-47BC-9F0D-1BAE57278627/click {"id": "node-8BA561D1-2993-47BC-9F0D-1BAE57278627"}
+DEBUG:urllib3.connectionpool:http://127.0.0.1:62503 "POST /session/CD760C70-F381-4DF7-8FD7-7D05DEC56481/element/node-8BA561D1-2993-47BC-9F0D-1BAE57278627/click HTTP/1.1" 200 14
+DEBUG:selenium.webdriver.remote.remote_connection:Finished Request
