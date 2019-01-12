@@ -12,7 +12,9 @@ These instructions will get you a copy of the project up and running on your loc
 - You'll need to have an installation of Python installed on your system, download from [here](https://www.python.org/downloads/).
 - You'll also need to install the modules used in the script via pip3. These modules are mentioned in [requirements.txt](requirements.txt).
 To install all of them at once, open terminal, cd to the project directory and run the command -
+
 `pip3 install -r requirements.txt`
+
 aaaaaand you're good to go.
 
 ### Deployment
