@@ -1,7 +1,0 @@
-DEBUG:selenium.webdriver.remote.remote_connection:POST http://127.0.0.1:51608/session {"capabilities": {"firstMatch": [{}], "alwaysMatch": {"browserName": "safari", "platformName": "mac"}}, "desiredCapabilities": {"browserName": "safari", "version": "", "platform": "MAC"}}
-DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1:51608
-DEBUG:urllib3.connectionpool:http://127.0.0.1:51608 "POST /session HTTP/1.1" 200 198
-DEBUG:selenium.webdriver.remote.remote_connection:Finished Request
-DEBUG:selenium.webdriver.remote.remote_connection:POST http://127.0.0.1:51608/session/38023570-D62D-49E8-A08A-F5C32D38F3A5/url {"url": "https://web.whatsapp.com"}
-DEBUG:urllib3.connectionpool:http://127.0.0.1:51608 "POST /session/38023570-D62D-49E8-A08A-F5C32D38F3A5/url HTTP/1.1" 200 14
-DEBUG:selenium.webdriver.remote.remote_connection:Finished Request

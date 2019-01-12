@@ -291,7 +291,19 @@ def send_messages_on_whatsapp():
     last_comment = Comment("None", "No comment yet...")
     URL = "https://web.whatsapp.com"
 
-    driver = webdriver.Safari()
+    if (properties.BROWSER.lower() == "safari"):
+        driver = webdriver.Safari()
+    elif (properties.BROWSER.lower() == "chrome"):
+        driver = webdriver.Chrome()
+    elif (properties.BROWSER.lower() == "firefox"):
+        driver = webdriver.Firefox()
+    else:
+        error_message = "Web browser should be one of Safari/Chrome/Firefox"
+        LOGGER.error_with_time(error_message)
+        print(error_message)
+        
+        return
+
     driver.get(URL)
 
     user_input = input(
