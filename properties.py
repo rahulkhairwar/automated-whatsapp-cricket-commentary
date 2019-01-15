@@ -1,6 +1,6 @@
 # Non-MacOS users can change it to Chrome/Firefox.
-BROWSER = "Safari"
-MATCH_URL = "http://www.espn.in/cricket/series/18693/commentary/1144997/australia-vs-india-1st-odi-india-in-aus-2018-19"
+BROWSER = "Chrome"
+MATCH_URL = "http://www.espncricinfo.com/series/18693/commentary/1144998/australia-vs-india-2nd-odi-india-in-aus-2018-19"
 
 # Match start timings according to where the script is being run.
 MATCH_START_HOURS = 5

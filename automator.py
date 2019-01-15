@@ -294,7 +294,7 @@ def send_messages_on_whatsapp():
     if (properties.BROWSER.lower() == "safari"):
         driver = webdriver.Safari()
     elif (properties.BROWSER.lower() == "chrome"):
-        driver = webdriver.Chrome()
+        driver = webdriver.Chrome("./chromedriver")
     elif (properties.BROWSER.lower() == "firefox"):
         driver = webdriver.Firefox()
     else:
