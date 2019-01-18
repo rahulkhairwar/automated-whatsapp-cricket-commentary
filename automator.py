@@ -7,6 +7,7 @@ import logging
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
@@ -78,6 +79,12 @@ class Logger():
         logging.exception(message)
 
 
+def addShiftEnter(text):
+    text = text.replace("\n", Keys.SHIFT + Keys.ENTER)
+
+    return text
+
+
 def get_current_time():
     return datetime.datetime.now()
 
@@ -91,6 +98,8 @@ def get_team_name_and_score(soup, top_list_item_class_name):
         "div", TEAM_NAME_CLASS_NAME)
     team_name = team.a.find("span", {"class": TEAM_SPAN_CLASS_NAME}).text
     team_score = team.find("div", {"class": SCORE_CLASS_NAME}).text
+    team_name = addShiftEnter(team_name)
+    team_score = addShiftEnter(team_score)
 
     return team_name, team_score
 
@@ -121,16 +130,17 @@ def get_commentary(soup):
         if (over is None):
             over = ""
         else:
-            over = over.text
+            over = addShiftEnter(over.text)
             # over = over.text.replace("\"", "'")
 
-        if (description is None):
+        if (description is None or properties.IS_TEST_MODE):
             description = ""
         else:
-            if properties.IS_TEST_MODE:
-                description = ""
-            else:
-                description = description.text
+            # if properties.IS_TEST_MODE:
+            #     description = ""
+            # else:
+            description = addShiftEnter(description.text)
+
             # description = description.text.replace("\"", "'")
 
         comment = Comment(over, description)
@@ -141,7 +151,8 @@ def get_commentary(soup):
 
         if not properties.IS_TEST_MODE:
             for p in paragraphs:
-                comment.add_paragraph(p.text)
+                p = addShiftEnter(p.text)
+                comment.add_paragraph(p)
                 # comment.add_paragraph(p.text.replace("\"", "'"))
 
         if (len(over) != 0 or len(description) != 0 or len(comment.paragraphs) != 0):
@@ -263,7 +274,7 @@ def scheduled_job(driver, names):
 
         LOGGER.debug_with_time("Will wait to locate send_button...")
         send_button = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located(
+            EC.element_to_be_clickable(
                 (By.CLASS_NAME, SEND_BUTTON_CLASS_NAME))
         )
         LOGGER.debug("send_button found!")
