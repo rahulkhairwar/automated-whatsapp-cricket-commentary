@@ -6,6 +6,7 @@ import properties
 import logging
 from bs4 import BeautifulSoup
 from selenium import webdriver
+from selenium.common.exceptions import TimeoutException, WebDriverException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
@@ -49,7 +50,6 @@ class Comment:
         return "over : {}, desc : {}, paras : {}".format(self.over, self.description, self.paragraphs)
 
 
-# class Logger(logging.getLoggerClass()):
 class Logger():
     def __init__(self, log_filename):
         logging.basicConfig(filename=log_filename, level=logging.DEBUG)
@@ -79,10 +79,17 @@ class Logger():
         logging.exception(message)
 
 
-def addShiftEnter(text):
-    text = text.replace("\n", Keys.SHIFT + Keys.ENTER)
+class TextUtils:
+    def replaceQuotesInText(text):
+        # First, remove all single-quotes from the text.
+        # text = text.replace("'", "")
+        # Then, replace all double-quotes in the text with single-quotes.
+        text = text.replace("\"", "``")
+        
+        # Not working in Chrome(and not required in Safari).
+        text = text.replace("\n", Keys.SHIFT + Keys.ENTER)
 
-    return text
+        return text
 
 
 def get_current_time():
@@ -98,8 +105,8 @@ def get_team_name_and_score(soup, top_list_item_class_name):
         "div", TEAM_NAME_CLASS_NAME)
     team_name = team.a.find("span", {"class": TEAM_SPAN_CLASS_NAME}).text
     team_score = team.find("div", {"class": SCORE_CLASS_NAME}).text
-    team_name = addShiftEnter(team_name)
-    team_score = addShiftEnter(team_score)
+    team_name = TextUtils.replaceQuotesInText(team_name)
+    team_score = TextUtils.replaceQuotesInText(team_score)
 
     return team_name, team_score
 
@@ -130,8 +137,7 @@ def get_commentary(soup):
         if (over is None):
             over = ""
         else:
-            over = addShiftEnter(over.text)
-            # over = over.text.replace("\"", "'")
+            over = TextUtils.replaceQuotesInText(over.text)
 
         if (description is None or properties.IS_TEST_MODE):
             description = ""
@@ -139,9 +145,7 @@ def get_commentary(soup):
             # if properties.IS_TEST_MODE:
             #     description = ""
             # else:
-            description = addShiftEnter(description.text)
-
-            # description = description.text.replace("\"", "'")
+            description = TextUtils.replaceQuotesInText(description.text)
 
         comment = Comment(over, description)
         paragraphs = commentary_item.findAll("p", {"class": "comment"})
@@ -151,9 +155,8 @@ def get_commentary(soup):
 
         if not properties.IS_TEST_MODE:
             for p in paragraphs:
-                p = addShiftEnter(p.text)
+                p = TextUtils.replaceQuotesInText(p.text)
                 comment.add_paragraph(p)
-                # comment.add_paragraph(p.text.replace("\"", "'"))
 
         if (len(over) != 0 or len(description) != 0 or len(comment.paragraphs) != 0):
             commentary.append(comment)
@@ -252,46 +255,51 @@ def scheduled_job(driver, names):
     if not has_updates:
         message_content = "No new updates right now..."
 
-    for name in names:
-        user = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located(
-                (By.XPATH, "//span[@title = \"{}\"]".format(name)))
-        )
-        LOGGER.debug_with_time("User found!")
-        user.click()
+    try:
+        for name in names:
+            user = WebDriverWait(driver, 10).until(
+                EC.presence_of_element_located(
+                    (By.XPATH, "//span[@title = \"{}\"]".format(name)))
+            )
+            LOGGER.debug_with_time("User found!")
+            user.click()
 
-        message_box = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located(
-                (By.CLASS_NAME, MESSAGE_BOX_CLASS_NAME))
-        )
-        LOGGER.debug_with_time("Message box found!")
+            message_box = WebDriverWait(driver, 10).until(
+                EC.presence_of_element_located(
+                    (By.CLASS_NAME, MESSAGE_BOX_CLASS_NAME))
+            )
+            LOGGER.debug_with_time("Message box found!")
 
-        if len(message_content) == 0:
-            continue
-        
-        message_box.send_keys(message_content)
-        # message_box.text = message_content
+            if len(message_content) == 0:
+                continue
+            
+            message_box.send_keys(message_content)
+            # message_box.text = message_content
 
-        LOGGER.debug_with_time("Will wait to locate send_button...")
-        send_button = WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable(
-                (By.CLASS_NAME, SEND_BUTTON_CLASS_NAME))
-        )
-        LOGGER.debug("send_button found!")
-        send_button.click()
+            LOGGER.debug_with_time("Will wait to locate send_button...")
+            send_button = WebDriverWait(driver, 10).until(
+                EC.element_to_be_clickable(
+                    (By.CLASS_NAME, SEND_BUTTON_CLASS_NAME))
+            )
+            LOGGER.debug("send_button found!")
+            send_button.click()
+    except (TimeoutException, WebDriverException) as e:
+        with open("error_logs.log", "a+") as error_logfile:
+            error_logfile.write("ERROR:root:[" + get_current_time().strftime('%Y-%m-%d %H:%M:%S') + "] : Exception occurred => " + str(e))
+
+        return
 
 
 def scheduler(driver, names):
     scheduled_job(driver, names)
     schedule.every(2).minutes.do(scheduled_job, driver, names)
-    # schedule.every(10).seconds.do(scheduled_job, driver, names)
 
     while (True):
         schedule.run_pending()
         time.sleep(1)
 
 
-def send_messages_on_whatsapp():
+def start_commentary():
     global match_start_time, match_end_time, last_comment
 
     current_time = datetime.datetime.now()
@@ -331,4 +339,14 @@ def init_logger():
 
 if __name__ == "__main__":
     init_logger()
-    send_messages_on_whatsapp()
+    start_commentary()
+
+
+# TODO :
+#   - Add try-except wherever applicable.
+#   - Use cookies.json to store the last_comment, user details(maybe), etc.
+#   - (Optional) Can send a mail to myself if the program stops due to an exception.
+#   - Change last_comment logic to store it AFTER the commentary has been successfully sent.
+#   - Fix the bug where sometimes the first half of a message gets vanished.
+#   - And now the most important : Since the Selenium and Whatsapp combination is such a b^&$h, 
+#       just create a damn API and an app already .-_-.
