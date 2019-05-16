@@ -128,6 +128,11 @@ def get_commentary(soup):
 
     root_div_tags_children = root_div_tags_children.find(
         "div", {"class": "content"})
+
+    if (root_div_tags_children is None):
+        LOGGER.error_with_time("Couldn't find div for root_div_tags_children. Aborting.")
+        exit(1)
+        
     commentary = []
 
     for commentary_item in root_div_tags_children:
@@ -350,3 +355,4 @@ if __name__ == "__main__":
 #   - Fix the bug where sometimes the first half of a message gets vanished.
 #   - And now the most important : Since the Selenium and Whatsapp combination is such a b^&$h, 
 #       just create a damn API and an app already .-_-.
+#   - Move utils, logging related stuff, etc. to separate files.
