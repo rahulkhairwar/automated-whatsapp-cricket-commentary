@@ -81,11 +81,7 @@ class Logger():
 
 class TextUtils:
     def replaceQuotesInText(text):
-        # First, remove all single-quotes from the text.
-        # text = text.replace("'", "")
-        # Then, replace all double-quotes in the text with single-quotes.
-        text = text.replace("\"", "``")
-        
+        text = text.replace("\"", "`")
         # Not working in Chrome(and not required in Safari).
         text = text.replace("\n", Keys.SHIFT + Keys.ENTER)
 
@@ -147,9 +143,6 @@ def get_commentary(soup):
         if (description is None or properties.IS_TEST_MODE):
             description = ""
         else:
-            # if properties.IS_TEST_MODE:
-            #     description = ""
-            # else:
             description = TextUtils.replaceQuotesInText(description.text)
 
         comment = Comment(over, description)
@@ -252,8 +245,6 @@ def scheduled_job(driver, names):
         # return "The match hasn't started yet..."
         return
 
-    MESSAGE_BOX_CLASS_NAME = "_1Plpp"
-    SEND_BUTTON_CLASS_NAME = "_35EW6"
     has_updates = True
     message_content = get_match_info()
 
@@ -266,26 +257,28 @@ def scheduled_job(driver, names):
                 EC.presence_of_element_located(
                     (By.XPATH, "//span[@title = \"{}\"]".format(name)))
             )
+
             LOGGER.debug_with_time("User found!")
             user.click()
 
             message_box = WebDriverWait(driver, 10).until(
                 EC.presence_of_element_located(
-                    (By.CLASS_NAME, MESSAGE_BOX_CLASS_NAME))
+                    (By.CLASS_NAME, properties.MESSAGE_BOX_CLASS_NAME))
             )
+            
             LOGGER.debug_with_time("Message box found!")
 
             if len(message_content) == 0:
                 continue
             
             message_box.send_keys(message_content)
-            # message_box.text = message_content
-
             LOGGER.debug_with_time("Will wait to locate send_button...")
+
             send_button = WebDriverWait(driver, 10).until(
                 EC.element_to_be_clickable(
-                    (By.CLASS_NAME, SEND_BUTTON_CLASS_NAME))
+                    (By.CLASS_NAME, properties.SEND_BUTTON_CLASS_NAME))
             )
+
             LOGGER.debug("send_button found!")
             send_button.click()
     except (TimeoutException, WebDriverException) as e:
@@ -348,10 +341,15 @@ if __name__ == "__main__":
 
 
 # TODO :
+#   - Whatsapp keeps changing the class-name of the message text-box and the send button, so find them logically instead of using the ids.
 #   - Add try-except wherever applicable.
 #   - Use cookies.json to store the last_comment, user details(maybe), etc.
 #   - (Optional) Can send a mail to myself if the program stops due to an exception.
 #   - Change last_comment logic to store it AFTER the commentary has been successfully sent.
+#   - Change last_comment logic to remove the repeated stuff from a comment, when there's something new added to the same comment, eg. -
+#       45.3* - Abc...
+#       45.3* - Abc...xyz
+#       Should ideally display only the new part "45.3* - xyz".
 #   - Fix the bug where sometimes the first half of a message gets vanished.
 #   - And now the most important : Since the Selenium and Whatsapp combination is such a b^&$h, 
 #       just create a damn API and an app already .-_-.

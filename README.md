@@ -2,6 +2,8 @@
 
 A python script that fetches live cricket commentary for a Test/ODI(yet to test for T20, but should work the same) match from an ESPNCricInfo match link, and sends it to a contact on Whatsapp automatically, at regular intervals.
 
+`Update` : I've recently noticed that Whatsapp has started changing the ids of the message text-box and the submit button, so for now need to find the new ids from the source and add them to properties.py, but I might try to take that dependency out later on.
+
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.

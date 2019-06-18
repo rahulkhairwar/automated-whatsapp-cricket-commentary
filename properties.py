@@ -1,6 +1,8 @@
 # Non-MacOS users can change it to Chrome/Firefox.
-BROWSER = "Chrome" # can be Chrome/Safari/Firefox
-MATCH_URL = "http://www.espncricinfo.com/series/19059/commentary/1168246/india-vs-australia-5th-odi-aus-in-ind-2018-19"
+BROWSER = "Safari" # can be Chrome/Safari/Firefox
+MATCH_URL = "http://www.espncricinfo.com/series/8039/commentary/1144506/afghanistan-vs-england-24th-match-icc-cricket-world-cup-2019"
+MESSAGE_BOX_CLASS_NAME = "_3u328"
+SEND_BUTTON_CLASS_NAME = "_3M-N-"
 
 # Match start timings according to where the script is being run.
 MATCH_START_HOURS = 13
