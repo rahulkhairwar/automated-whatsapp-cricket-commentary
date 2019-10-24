@@ -21,7 +21,7 @@ aaaaaand you're good to go.
 
 ### Deployment
 
-- In properties.py file, replace "Safari" with "Chrome"/"Firefox", whatever browser you have installed.
+- In properties.py file, replace "Safari" with "Chrome"/"Firefox", whatever browser you have installed. For Chrome and Firefox, you'll have to install their respective drivers on the system as well.
 - Get the match COMMENTARY(on the match page, there's a "Commentary" tab available on the top) URL from [ESPNCricinfo](http://www.espncricinfo.com), for which you want to get the commentary, and replace the content for the current MATCH_URL in properties.py.
 - Change the MATCH_START_HOURS/MINUTES and MATCH_END_HOURS/MINUTES as per the time of your system.
 - Then, open terminal, cd to the project folder and run the command -
@@ -37,6 +37,14 @@ The script is easily configurable as per one's own use-case, can change -
 - Match URL - in [properties.py](properties.py).
 `(P.S.: ESPN Cricinfo only. Will have to dig into the HTML again for another site, for now I'm fine with just this one!)`
 - Display options.
+
+### Known Issues
+
+- The "send message" button click somehow doesn't work on Safari anymore, even though the class-id is the same. (Weird!) Will probably have to try out a few things to see if the issue is with Selenium or Safari (goes on to my todo-list).
+
+### Versioning
+
+Using SemVer for versioning. For the versions available, see the [tags on this repository](https://github.com/rahulkhairwar/automated-whatsapp-cricket-commentary/tags).
 
 ## License
 
