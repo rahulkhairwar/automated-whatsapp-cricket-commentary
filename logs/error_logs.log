@@ -1,0 +1,7 @@
+ERROR:root:[2019-10-24 19:34:33] : Exception occurred => Message: 
+ERROR:root:[2019-10-24 19:58:07] : Exception occurred => Message: 
+ERROR:root:[2019-10-24 20:04:32] : Exception occurred => Message: 
+ERROR:root:[2019-10-24 23:36:08] : Exception occurred => Message: stale element reference: element is not attached to the page document
+  (Session info: chrome=78.0.3904.70)
+ERROR:root:[2019-10-24 23:38:22] : Exception occurred => Message: stale element reference: element is not attached to the page document
+  (Session info: chrome=78.0.3904.70)

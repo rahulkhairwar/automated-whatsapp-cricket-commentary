@@ -1,6 +1,5 @@
 import urllib.request
 import schedule
-import datetime
 import time
 import properties
 import logging
@@ -8,89 +7,19 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.common.exceptions import TimeoutException, WebDriverException
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from utils.Logger import LoggerUtils
+from models.Comment import Comment
+from models.Match import Match
+import utils.TextUtils as TextUtils
+import utils.TimeUtils as TimeUtils
 
 match_start_time = ""
 match_end_time = ""
 last_comment = ""
 has_updates = True
 LOGGER = ""
-
-class Match:
-    def __init__(self, first_team, second_team, first_team_score, second_team_score):
-        self.first_team = first_team
-        self.second_team = second_team
-        self.first_team_score = first_team_score
-        self.second_team_score = second_team_score
-        self.commentary = []
-
-    def __repr__(self):
-        return str(self.__dict__)
-
-
-class Comment:
-    def __init__(self, over, description):
-        self.over = over
-        self.description = description
-        self.paragraphs = []
-
-    def add_paragraph(self, paragraph):
-        self.paragraphs.append(paragraph)
-
-    def __eq__(self, other):
-        return self.__dict__ == other.__dict__
-
-    def __ne__(self, other):
-        return self.__dict__ != other.__dict__
-
-    def __repr__(self):
-        # return str(self.__dict__)
-        return "over : {}, desc : {}, paras : {}".format(self.over, self.description, self.paragraphs)
-
-
-class Logger():
-    def __init__(self, log_filename):
-        logging.basicConfig(filename=log_filename, level=logging.DEBUG)
-
-    def debug_with_time(self, message):
-        logging.debug("{} => {}".format(get_current_time(), message))
-    
-    def debug(self, message):
-        logging.debug(message)
-
-    def info_with_time(self, message):
-        logging.info("{} => {}".format(get_current_time(), message))
-
-    def info(self, message):
-        logging.info(message)
-
-    def error_with_time(self, message):
-        logging.error("{} => {}".format(get_current_time(), message))
-
-    def error(self, message):
-        logging.error(message)
-
-    def exception_with_time(self, message):
-        logging.exception("{} => {}".format(get_current_time(), message))
-
-    def exception(self, message):
-        logging.exception(message)
-
-
-class TextUtils:
-    def replaceQuotesInText(text):
-        text = text.replace("\"", "`")
-        # Not working in Chrome(and not required in Safari).
-        text = text.replace("\n", Keys.SHIFT + Keys.ENTER)
-
-        return text
-
-
-def get_current_time():
-    return datetime.datetime.now()
-
 
 def get_team_name_and_score(soup, top_list_item_class_name):
     TEAM_NAME_CLASS_NAME = "cscore_team icon-font-after"
@@ -236,13 +165,11 @@ def get_match_info():
 def scheduled_job(driver, names):
     global has_updates, match_start_time, match_end_time
 
-    current_time = datetime.datetime.now()
-    # print("entered scheduled_job")
+    current_time = TimeUtils.get_current_time()
     LOGGER.debug_with_time("Entered scheduled_job...")
 
     # the match hasn't started yet...
-    if current_time < match_start_time or current_time > match_end_time:
-        # return "The match hasn't started yet..."
+    if not properties.IS_TEST_MODE and current_time < match_start_time or current_time > match_end_time:
         return
 
     has_updates = True
@@ -270,7 +197,7 @@ def scheduled_job(driver, names):
 
             if len(message_content) == 0:
                 continue
-            
+
             message_box.send_keys(message_content)
             LOGGER.debug_with_time("Will wait to locate send_button...")
 
@@ -279,11 +206,12 @@ def scheduled_job(driver, names):
                     (By.CLASS_NAME, properties.SEND_BUTTON_CLASS_NAME))
             )
 
-            LOGGER.debug("send_button found!")
+            LOGGER.debug("Send_button found!")
+            send_button.send_keys("\n")
             send_button.click()
     except (TimeoutException, WebDriverException) as e:
         with open(properties.ERROR_LOG_FILE_NAME, "a+") as error_logfile:
-            error_logfile.write("ERROR:root:[" + get_current_time().strftime('%Y-%m-%d %H:%M:%S') + "] : Exception occurred => " + str(e))
+            error_logfile.write("ERROR:root:[" + TimeUtils.get_current_time().strftime('%Y-%m-%d %H:%M:%S') + "] : Exception occurred => " + str(e))
 
         return
 
@@ -300,7 +228,7 @@ def scheduler(driver, names):
 def start_commentary():
     global match_start_time, match_end_time, last_comment
 
-    current_time = datetime.datetime.now()
+    current_time = TimeUtils.get_current_time()
     match_start_time = current_time.replace(
         hour=properties.MATCH_START_HOURS, minute=properties.MATCH_START_MINUTES, second=0, microsecond=0)
     match_end_time = current_time.replace(
@@ -311,13 +239,12 @@ def start_commentary():
     if (properties.BROWSER.lower() == "safari"):
         driver = webdriver.Safari()
     elif (properties.BROWSER.lower() == "chrome"):
-        driver = webdriver.Chrome("./chromedriver")
+        driver = webdriver.Chrome("../chromedriver")
     elif (properties.BROWSER.lower() == "firefox"):
         driver = webdriver.Firefox()
     else:
         error_message = "Web browser should be one of Safari/Chrome/Firefox"
         LOGGER.error_with_time(error_message)
-        print(error_message)
         
         return
 
@@ -332,7 +259,7 @@ def start_commentary():
 def init_logger():
     global LOGGER
 
-    LOGGER = Logger(properties.SCRIPT_LOG_FILE_NAME)
+    LOGGER = LoggerUtils(properties.SCRIPT_LOG_FILE_NAME)
 
 
 if __name__ == "__main__":
@@ -353,4 +280,4 @@ if __name__ == "__main__":
 #   - Fix the bug where sometimes the first half of a message gets vanished.
 #   - And now the most important : Since the Selenium and Whatsapp combination is such a b^&$h, 
 #       just create a damn API and an app already .-_-.
-#   - Move utils, logging related stuff, etc. to separate files.
+#   - Check the issue with the "send message" button click on Safari.

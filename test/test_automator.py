@@ -2,8 +2,15 @@
 import sys
 # insert at 1, 0 is the script path (or '' in REPL)
 sys.path.insert(1, '../src/')
+sys.path.insert(2, '../utils/')
+sys.path.insert(3, '../models/')
 
-from automator import get_match_info, has_updates, scheduled_job, datetime, properties, Comment, webdriver, last_comment
+from automator import get_match_info, has_updates, scheduled_job, properties, Comment, webdriver, last_comment
+from models.Match import Match
+from models.Comment import Comment
+from utils import TimeUtils
+
+match_start_time = ""
 
 def test_scheduled_job():
     message_content = get_match_info()
@@ -21,7 +28,7 @@ def test_send_messages_on_whatsapp():
     global match_start_time
     global last_comment
     
-    current_time = datetime.datetime.now()
+    current_time = TimeUtils.get_current_time()
     match_start_time = current_time.replace(hour = properties.MATCH_START_HOURS, minute = properties.MATCH_START_MINUTES, second = 0, microsecond = 0)
     last_comment = Comment("None", "No comment yet...")
     # URL = "https://web.whatsapp.com"
