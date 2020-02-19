@@ -183,7 +183,7 @@ def scheduled_job(driver, names):
         for name in names:
             user = WebDriverWait(driver, 10).until(
                 EC.presence_of_element_located(
-                    (By.XPATH, "//span[@title = \"{}\"]".format(name)))
+                    (By.XPATH, "//span[.='{}']".format(name)))
             )
 
             LOGGER.debug_with_time("User found!")

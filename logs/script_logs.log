@@ -1,0 +1,7 @@
+DEBUG:selenium.webdriver.remote.remote_connection:POST http://127.0.0.1:61858/session {"capabilities": {"firstMatch": [{}], "alwaysMatch": {"browserName": "chrome", "platformName": "any", "goog:chromeOptions": {"extensions": [], "args": []}}}, "desiredCapabilities": {"browserName": "chrome", "version": "", "platform": "ANY", "goog:chromeOptions": {"extensions": [], "args": []}}}
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1:61858
+DEBUG:urllib3.connectionpool:http://127.0.0.1:61858 "POST /session HTTP/1.1" 200 689
+DEBUG:selenium.webdriver.remote.remote_connection:Finished Request
+DEBUG:selenium.webdriver.remote.remote_connection:POST http://127.0.0.1:61858/session/184fb7416aa1deaef2d70d27cf3d6f9e/url {"url": "https://web.wechat.com/?lang=en_US"}
+DEBUG:urllib3.connectionpool:http://127.0.0.1:61858 "POST /session/184fb7416aa1deaef2d70d27cf3d6f9e/url HTTP/1.1" 200 14
+DEBUG:selenium.webdriver.remote.remote_connection:Finished Request
